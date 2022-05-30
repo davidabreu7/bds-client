@@ -6,16 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
-
     final
     ClientService service;
 
@@ -34,5 +31,26 @@ public class ClientController {
         return ResponseEntity.ok(service.findAll(pageRequest));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClientDto> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<ClientDto> insert(@RequestBody ClientDto dto) {
+        return ResponseEntity.ok(service.insert(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.status(HttpStatus.GONE).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientDto> update(@PathVariable Long id, @RequestBody ClientDto dto) {
+        return ResponseEntity.ok(service.update(id, dto));
+
+    }
 
 }
